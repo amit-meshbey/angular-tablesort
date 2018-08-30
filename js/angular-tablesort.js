@@ -41,7 +41,7 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
         return templateString
             .replace(/FILTER_STRING/g, 'filtering.filterString')
             .replace(/CURRENT_PAGE_RANGE/g, 'pagination.getPageRangeString(TOTAL_COUNT)')
-            .replace(/TOTAL_COUNT/g, $scope.itemsArrayExpression + '.length')
+            .replace(/TOTAL_COUNT/g, 'filtering.unFilteredCount')
             .replace(/PER_PAGE_OPTIONS/g, 'pagination.perPageOptions')
             .replace(/ITEMS_PER_PAGE/g, 'pagination.perPage')
             .replace(/ITEM_NAME_SINGULAR/g, 'itemNameSingular')
@@ -110,6 +110,7 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
                 filterString: '',
                 filterFunction: tableSortConfig.filterFunction,
                 filteredCount: 0,
+                unFilteredCount: 0,
                 filterFields: []
             };
 
@@ -318,6 +319,8 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
             }
 
             $scope.filterLimitFun = function(array) {
+                $scope.filtering.unFilteredCount = array.length;
+
                 if( !$attrs.tsFilterFunction && $scope.filtering.filterString === '' ) {
                     //Return unfiltered when NOT using a custom filter function and when nothing is being searched
                     $scope.filtering.filteredCount = array.length;
