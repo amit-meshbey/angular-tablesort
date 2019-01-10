@@ -278,6 +278,11 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
                 }
             }
 
+            if( $attrs.hasOwnProperty('tsDisableSorting'))
+                $scope.sorting = {enabled: false};
+            else
+                $scope.sorting = {enabled: true};
+
             if( $attrs.tsFilterFields ) {
                 var filterFields = $attrs.tsFilterFields.split(',')
                     .filter(function(item) {
@@ -337,6 +342,9 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
             };
 
             $scope.sortFun = function( a, b ) {
+                if (!$scope.sorting.enabled)
+                    return 0;
+
                 var i, aval, bval, descending, filterFun, compResult;
                 for( i=0; i<$scope.sortExpression.length; i=i+1 ) {
                     aval = $scope.sortExpression[i][0](a);
