@@ -216,6 +216,11 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
         }],
         link: function($scope, $element, $attrs, tsWrapperCtrl) {
 
+            $scope.sorting = {enabled: true};
+            $scope.$watch(function () {return $scope.$eval($attrs.tsDisableSorting)}, function(newValue, oldValue) {
+                $scope.sorting = {enabled: !newValue};
+            })
+
             function parseExprOrGetString(v) {
                 try {
                     //try to parse the string to see if it contains an expression
@@ -277,11 +282,6 @@ tableSortModule.directive( 'tsWrapper', ['$parse', '$compile', function( $parse,
                     }
                 }
             }
-
-            if( $attrs.hasOwnProperty('tsDisableSorting'))
-                $scope.sorting = {enabled: false};
-            else
-                $scope.sorting = {enabled: true};
 
             if( $attrs.tsFilterFields ) {
                 var filterFields = $attrs.tsFilterFields.split(',')
